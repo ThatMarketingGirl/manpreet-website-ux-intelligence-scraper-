@@ -1,78 +1,48 @@
-import requests
-from bs4 import BeautifulSoup
-import re
-
-def fetch_page(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (UX Analyzer Bot)"
-    }
-    res = requests.get(url, headers=headers, timeout=10)
-    return res.text
-
-def clean_text(html):
-    soup = BeautifulSoup(html, "lxml")
-
-    for tag in soup(["script", "style", "noscript"]):
-        tag.extract()
-
-    text = soup.get_text(separator="\n")
-    text = re.sub(r'\n+', '\n', text)
-    return text[:8000]  # limit for analysis
+from visual_engine import analyze_visual_structure
+from figma_generator import generate_figma_wireframe
 
 def analyze_website(url, context):
-    html = fetch_page(url)
-    text = clean_text(html)
+    visual_data = analyze_visual_structure(url)
 
-    report = f"""
-UX INTELLIGENCE ANALYSIS
-========================
+    ux_text = f"""
+UX INTELLIGENCE REPORT
 
-INPUT CONTEXT:
-Goal: {context['goal']}
-Style: {context['style']}
-Focus: {context['focus']}
-Ignore: {context['ignore']}
+GOAL:
+{context['goal']}
 
-TARGET URL:
-{url}
+STYLE:
+{context['style']}
 
-------------------------
-STRUCTURE ANALYSIS:
-- Page contains layered content structure
-- Likely hero → feature → proof → CTA flow
-- Modular section design detected
+----------------------
 
-UX PATTERNS:
-- Linear scroll narrative likely present
-- CTA repetition across sections
-- Focus-driven content hierarchy
+VISUAL ANALYSIS:
+{visual_data}
 
-MOTION & INTERACTION (INFERRED):
-- Scroll-based reveal patterns
-- Hover-based micro interactions likely used
-- Possible fade/slide transitions between sections
-- Depth layering used for engagement
+----------------------
 
-DESIGN SYSTEM (INFERRED):
-- Consistent spacing rhythm observed in structure
-- Likely 2–3 font hierarchy system
-- Accent color used for conversion elements
-- Card-based UI pattern probable
+UX INSIGHTS:
+- Scroll-based structure inferred
+- Modular section layout
+- Conversion-driven hierarchy
 
-INSPIRATION INSIGHTS:
-- This layout is strong for storytelling landing pages
-- Can be adapted for {context['style']} style execution
-- Focus should be on UX clarity over visual replication
+MOTION:
+- Likely scroll animations
+- Hover micro-interactions
+- Soft transitions
 
-REBUILD GUIDANCE:
-- Recreate structure, not visuals
-- Use modular sections
-- Add motion intentionally, not excessively
-- Keep CTA hierarchy clean
+DESIGN SYSTEM:
+- Grid-based layout (12 column)
+- High spacing system
+- CTA-driven structure
 
-NEXT STEP SUGGESTIONS:
-- Turn this into landing page wireframe
-- Convert into Figma structure
-- Generate marketing pitch deck from this layout
+INSPIRATION NOTES:
+- Rebuild structure, not visuals
+- Use modular design thinking
 """
-    return report
+
+    wireframe = generate_figma_wireframe({}, visual_data)
+
+    return {
+        "ux_report": ux_text,
+        "figma_wireframe": wireframe
+    }
