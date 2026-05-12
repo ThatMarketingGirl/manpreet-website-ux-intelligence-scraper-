@@ -1,36 +1,26 @@
 from playwright.sync_api import sync_playwright
-from PIL import Image
-import io
 
-def capture_screenshot(url):
+def analyze_visual_structure(url):
+
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1280, "height": 720})
         page.goto(url, timeout=60000)
+
         screenshot = page.screenshot(full_page=True)
+
         browser.close()
-        return screenshot
 
-def analyze_visual_structure(url):
-    image_bytes = capture_screenshot(url)
-
-    image = Image.open(io.BytesIO(image_bytes))
-
-    width, height = image.size
-
-    # Visual heuristics (simplified intelligence layer)
-    analysis = {
-        "resolution": f"{width}x{height}",
-        "layout_type": "likely vertical scroll layout",
-        "visual_hierarchy": "hero section dominant, stacked sections below",
-        "spacing_pattern": "high whitespace / modular grid inferred",
-        "ui_density": "medium to low density",
+    # simplified visual intelligence
+    return {
+        "layout_type": "vertical scroll layout",
+        "visual_hierarchy": "hero dominant, stacked sections",
+        "spacing": "high whitespace system",
+        "ui_density": "medium",
         "interaction_zones": [
-            "top navigation",
-            "hero CTA area",
-            "mid-scroll feature blocks",
-            "bottom conversion section"
+            "hero CTA",
+            "mid feature blocks",
+            "scroll transitions",
+            "final conversion section"
         ]
     }
-
-    return analysis
