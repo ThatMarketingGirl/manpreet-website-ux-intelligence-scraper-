@@ -1,54 +1,28 @@
-def generate_figma_wireframe(ux_data, visual_data):
-    wireframe = {
-        "frame": {
-            "name": "Landing Page",
-            "type": "desktop",
-            "width": 1440,
-            "height": "auto"
-        },
+def generate_figma_wireframe(_, visual_data):
 
-        "layout_system": {
-            "grid": "12-column",
-            "spacing": "8pt system",
-            "alignment": "center + full width sections"
-        },
+    return {
+        "frame": "Desktop 1440px",
+        "grid": "12 column system",
+        "layout_style": visual_data.get("layout_type"),
 
-        "components": [
+        "sections": [
             {
-                "section": "Hero",
-                "elements": [
-                    "Headline (H1)",
-                    "Subheading",
-                    "Primary CTA Button",
-                    "Background visual layer"
-                ]
+                "name": "Hero",
+                "components": ["Heading", "Subheading", "CTA Button", "Visual background"]
             },
             {
-                "section": "Features",
-                "elements": [
-                    "3–4 feature cards",
-                    "Icon + title + description"
-                ]
+                "name": "Features",
+                "components": ["3–4 cards", "Icons", "Descriptions"]
             },
             {
-                "section": "Social Proof",
-                "elements": [
-                    "Testimonials",
-                    "Logos row"
-                ]
+                "name": "Social Proof",
+                "components": ["Testimonials", "Logos"]
             },
             {
-                "section": "Conversion",
-                "elements": [
-                    "Final CTA block",
-                    "Minimal text focus"
-                ]
+                "name": "CTA Section",
+                "components": ["Final conversion block"]
             }
         ],
 
-        "interaction_notes": ux_data.get("motion", "scroll-based transitions inferred"),
-
-        "visual_notes": visual_data.get("visual_hierarchy", "")
+        "notes": "This is a structural wireframe, not a visual clone."
     }
-
-    return wireframe
