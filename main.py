@@ -1,13 +1,13 @@
-import sys
 from analyzer import analyze_website
+import sys
 
 def ask_questions():
-    print("\nBefore analyzing, answer a few questions:\n")
+    print("\nAnswer a few questions before analysis:\n")
 
     goal = input("What are you building from this inspiration? ")
-    style = input("Desired style (minimal, premium, bold, playful, etc): ")
-    focus = input("What matters most (UX, visuals, conversion, motion): ")
-    ignore = input("What should be ignored (blog, footer, ecommerce, etc): ")
+    style = input("Style (minimal, premium, bold, playful): ")
+    focus = input("Focus (UX, visuals, conversion, motion): ")
+    ignore = input("What should be ignored? ")
 
     return {
         "goal": goal,
@@ -19,18 +19,21 @@ def ask_questions():
 def main():
     if len(sys.argv) < 2:
         print("Usage: python main.py <url>")
-        sys.exit(1)
+        return
 
     url = sys.argv[1]
-
     context = ask_questions()
-
-    print("\nAnalyzing website...\n")
 
     result = analyze_website(url, context)
 
-    print("\n--- UX INTELLIGENCE REPORT ---\n")
-    print(result)
+    print("\n================ UX REPORT ================\n")
+    print(result["ux_report"])
+
+    print("\n================ VISUAL DATA ================\n")
+    print(result["visual_data"])
+
+    print("\n================ FIGMA WIREFRAME ================\n")
+    print(result["figma_wireframe"])
 
 if __name__ == "__main__":
     main()
