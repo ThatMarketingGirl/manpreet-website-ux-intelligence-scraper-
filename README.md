@@ -16,3 +16,15 @@ It does NOT clone websites or copy assets.
 
 ```bash id="use1"
 python main.py https://example.com
+
+
+---
+
+# 3. requirements.txt
+
+```txt id="req1"
+requests
+beautifulsoup4
+lxml
+playwright
+pillow
